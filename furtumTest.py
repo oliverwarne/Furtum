@@ -1,5 +1,6 @@
 import praw
 import kdapi
+from operator import itemgetter
 
 r = praw.Reddit(user_agent='Test Script by u/{}'.format('INSERT USERNAME'))
 
@@ -27,6 +28,7 @@ def karmaCommentOBJ(submission,link):
                     finalComment = "Did pass " + str(karmacomment.body)
                 else:
                     finalComment = "None - Failed all"
+        ### DEBUG STATEMENTS - REMOVE FROM RELEASE ###
         else:
             if item.score == "None":
                 print "itmescore is none"
@@ -35,6 +37,7 @@ def karmaCommentOBJ(submission,link):
             if submission.short_link.split('/')[3] == item.link.split("/")[6]:
                 print "same thing"
             print "did not pass"
+        ### DEBUG STATEMENTS - REMOVE FROM RELEASE ###
     return karmalist
 
 def karmaCommentLink(karmaLink):
@@ -44,7 +47,8 @@ def karmaCommentLink(karmaLink):
     if not karmalist:
         return None
     else:
-        return sorted(karmalist,key=lambda x: x[1])[0][0]
+        return sorted(karmalist,key=itemgetter(1))[-1][0]
+        
 
 
 print karmaCommentLink("http://www.reddit.com/r/pics/comments/2z0lm7/miss_america_1924/")
