@@ -1,4 +1,4 @@
-import praw
+    import praw
 import kdapi
 
 r = praw.Reddit(user_agent='Test Script by u/{}'.format(INSERT USERNAME)
