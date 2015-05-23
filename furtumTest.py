@@ -2,11 +2,12 @@ import praw
 import kdapi
 import time
 import requests
+import config
 from operator import itemgetter
 
-r = praw.Reddit(user_agent='Test Script by u/{}'.format(INSERT USERNAME))
+r = praw.Reddit(user_agent='Test Script by u/{}'.format(config.creatorName))
 
-r.login('USERNAME','PASSWORD')
+r.login(config.botName, config.botPass)
 
 
 ########################################################################################################################
@@ -62,17 +63,11 @@ def karmacomment(link):
 ########################################################################################################################
 
 # establishes which subs to scan through. To add your own, just add another number that's higher, along with the sub
-subDict = {
-    0: "pics",
-    1: "funny", 
-    2: "TodayILearned",
-    3: "aww"
-    }
 index = 0
 
 while True:
     try:
-        subreddit = r.get_subreddit(subDict[index])
+        subreddit = r.get_subreddit(config.scanSub[index])
         for submission in subreddit.get_new(limit=20):
             topcomment = karmacomment(str(submission.permalink))
             file = open('testfile.txt')
@@ -80,14 +75,15 @@ while True:
                 print "Comment is empty/Doesnt exist!"
             elif file.read().find(str(topcomment)) != -1:  # find returns -1 when not found
                 print "submission already commented on!"
-                file.close
+                file.close()
             else:
+                file.close()
                 file = open('testfile.txt', 'a')
                 file.write(str(submission.permalink))
                 file.write('\n')
                 submission.add_comment(str(topcomment))
                 print "WORKED! :" + str(topcomment)
-                file.close
+                file.close()
 
     except UnicodeEncodeError:
         print "Stringify broke :("
@@ -105,7 +101,7 @@ while True:
             print "Link deleted :((("
         continue
     except requests.exceptions.HTTPError as err:
-        if err.response.status_code in [502, 503, 504]:
+        if [502, 503, 504] in err.http_error_msghttp_error_msg :
             # these errors may only be temporary
             print "reddit seems to be down. sleeping for 30 secs"
             time.sleep(30)
@@ -117,17 +113,22 @@ while True:
     except requests.exceptions.ConnectionError:
         print "what is this lol time to sleep"
         time.sleep(30)
+    finally:
+        index += 1
+        if index >= len(config.scanSub):
+            print "scanned all subs"
+            print "time to sleep now!"
+            time.sleep(300) # TODO : Reduce this to a reasonable number via mathy stuff
+            print "halfway through"
+            time.sleep(300)
+            index = 0
 
-    # Checks for comment with score below 0 and deletes it if it is.
-    user = r.get_redditor('furtum')
-    for comment in user.get_comments(limit=None):
-        if comment.score < 0.0:
-            comment.delete()
+        user = r.get_redditor('furtum')
+        # Checks for comment with score below 0 and deletes it if it is.
+        for comment in user.get_comments(limit=None):
+            if comment.score < 0.0:
+                comment.delete()
 
-    index += 1
-    if index >= 4:
-        print "scanned all subs"
-        print "time to sleep now!"
-        time.sleep(300) # TODO : Reduce this to a reasonable number
-        print "halway through"
-        time.sleep(300)
+
+
+
