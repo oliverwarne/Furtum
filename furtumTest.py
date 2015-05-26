@@ -101,7 +101,7 @@ while True:
             print "Link deleted :((("
         continue
     except requests.exceptions.HTTPError as err:
-        if [502, 503, 504] in err.http_error_msghttp_error_msg :
+        if [502, 503, 504] in err.http_error_msg :
             # these errors may only be temporary
             print "reddit seems to be down. sleeping for 30 secs"
             time.sleep(30)
@@ -123,7 +123,7 @@ while True:
             time.sleep(300)
             index = 0
 
-        user = r.get_redditor('furtum')
+        user = r.get_redditor(config.botName)
         # Checks for comment with score below 0 and deletes it if it is.
         for comment in user.get_comments(limit=None):
             if comment.score < 0.0:

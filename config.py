@@ -1,4 +1,4 @@
-creatorName = ""  # Your reddit username
+creatorName = ""  # Your (not bots)reddit username
 
 botName = ""  # Bots username
 botPass = ""  # Bot password
