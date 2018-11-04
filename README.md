@@ -1,6 +1,9 @@
 # Furtum
 A fun reddit bot that gets karma via reposting comments Trapped_in_Reddit style.
 
+## How it works
+What it does is scan through the new posts in the subreddits that you point it to. It will search every new post on Karmadecay to see if it's a repost. If it is, then it will find the time when the post got the most karma, and will steal the top comment from it. 
+
 ## Usage
 
 Using Furtum is generally pretty simple. You can leave it by itself for a while, and it shouldn't crash (for a while). If it does, message me with the error that it spits out and I'll try to fix it
@@ -14,3 +17,4 @@ Go through config.py and fill out everything.
 
 #### Running
 Once you have set everything up, just run furtum.py. It'll give you updates on what it's doing. 
+
